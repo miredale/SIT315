@@ -1,0 +1,28 @@
+// C++ code
+//
+/*
+  Pin 13, LED Blinks
+  Pin 2, PIR Motion Sensor
+*/
+
+int led = 13;
+int pir = 2;
+int count = 0;
+
+void setup(){
+  pinMode(pir, INPUT);
+  pinMode(led, OUTPUT);
+  Serial.begin(9600);
+  attachInterrupt(0, interruptChange, RISING );
+}
+void loop()
+{
+  int val = digitalRead(pir);
+  Serial.println(val);
+  digitalWrite(led, val);
+}
+
+void interruptChange()
+{
+  digitalWrite(led,1 );
+}
