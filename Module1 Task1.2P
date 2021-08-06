@@ -1,28 +1,49 @@
-// C++ code
+// C++ code by Matthew Iredale
 //
 /*
-  Pin 13, LED Blinks
-  Pin 2, PIR Motion Sensor
+This is a motion detection system,
+when the PIR Motion Sensor detects movement,
+an interrupt is triggered and the red LED flashes.
+Could be implemented as a cheap, quick and easy
+motion detection security system.
 */
 
+//Declaring the pin variables for LED and PIR
 int led = 13;
 int pir = 2;
-int count = 0;
 
 void setup(){
+  //Assigning PIR as Input, LED as Output
   pinMode(pir, INPUT);
   pinMode(led, OUTPUT);
+  //Begin monitor with Baud Rate of 9600
   Serial.begin(9600);
+  /*This is the interrupt, using RISING feature,
+  RISING makes sure interrupt is triggered,
+  when connected sensor changes from LOW to HIGH state
+  */
   attachInterrupt(0, interruptChange, RISING );
 }
+
 void loop()
 {
-  int val = digitalRead(pir);
-  Serial.println(val);
-  digitalWrite(led, val);
+  //LED is kept constantly off in loop method
+  digitalWrite(led, LOW);
+  //Delay of 2 seconds to ensure flash lasts,
+  //so enough time is given for user to visibly witness
+  delay(2000);
 }
 
 void interruptChange()
 {
-  digitalWrite(led,1 );
+  //Declaring val and assigned the input of the PIR
+  int val = digitalRead(pir);
+  //Provide context for output by printing
+  //what the output is 'Motion'
+  Serial.print("Motion: ");
+  //Print the current state of the PIR sensor
+  Serial.println(val);
+  //Assign current PIR state to LED OUTPUT,
+  digitalWrite(led, val);
+
 }
